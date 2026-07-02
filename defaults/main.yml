@@ -63,7 +63,6 @@ rhel10cis_legacy_boot: false
 # The audit variable found at the base
 ## metadata for Audit benchmark
 benchmark_version: '1.0.1'
-copyright_year: '2026'
 
 benchmark: RHEL10-CIS
 
@@ -73,6 +72,10 @@ skip_reboot: true
 
 # default value will change to true but won't reboot if not enabled but will error
 change_requires_reboot: false
+
+# A location that can be used as as a temporary location to execute scripts
+# note the drive with need exec permissions used by 1.1.1.11
+rhel10cis_temp_exec_location: /var
 
 ###########################################
 ### Goss is required on the remote host ###

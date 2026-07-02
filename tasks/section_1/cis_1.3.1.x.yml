@@ -103,8 +103,6 @@
     - rule_1.3.1.6
     - NIST800-53R5_AC-3
     - NIST800-53R5_MP-2
-  vars:
-    warn_control_id: "1.3.1.6"
   block:
     - name: "1.3.1.6 | AUDIT | Ensure no unconfined services exist | Find the unconfined services"
       ansible.builtin.shell: |
@@ -125,6 +123,8 @@
       when: discovered_unconf_services.stdout | length > 0
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "1.3.1.6"
 
 - name: "1.3.1.7 | PATCH | Ensure the MCS Translation Service (mcstrans) is not installed"
   when: rhel10cis_rule_1_3_1_7

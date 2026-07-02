@@ -52,8 +52,6 @@
     - firewalld
     - rule_4.1.4
     - NIST800-53R5_NA
-  vars:
-    warn_control_id: '4.1.4'
   block:
     - name: "4.1.4 | PATCH | Ensure firewalld active zone target is configured | Ensure active zone is set"
       ansible.posix.firewalld:
@@ -103,6 +101,8 @@
         - "'accept' in discovered_active_firewall_zone_settings.stdout"
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: '4.1.4'
 
 - name: "4.1.5 | PATCH | Ensure firewalld loopback traffic is configured"
   when: rhel10cis_rule_4_1_5
@@ -170,8 +170,6 @@
     - audit
     - rule_4.1.7
     - NIST800-55_CA-9
-  vars:
-    warn_control_id: "4.1.7"
   block:
     - name: "4.1.7 | AUDIT | Ensure firewalld services and ports are configured | Get list of services and ports"
       ansible.builtin.shell: |
@@ -194,3 +192,5 @@
       when: discovered_services_and_ports is defined
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "4.1.7"

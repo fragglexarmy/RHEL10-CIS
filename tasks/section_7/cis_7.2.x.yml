@@ -9,8 +9,6 @@
     - rule_7.2.1
     - user_accounts
     - NIST800-53R5_IA-5
-  vars:
-    warn_control_id: "7.2.1"
   block:
     - name: "7.2.1 | AUDIT | Ensure accounts in /etc/passwd use shadowed passwords | Get users not using shadowed passwords"
       ansible.builtin.command: awk -F':' '($2 != "x" ) { print $1}' /etc/passwd
@@ -29,6 +27,8 @@
       when: discovered_nonshadowed_users.stdout | length > 0
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "7.2.1"
 
 - name: "7.2.2 | PATCH | Ensure /etc/shadow password fields are not empty"
   when: rhel10cis_rule_7_2_2
@@ -68,8 +68,6 @@
     - NIST800-53R5_CM-6
     - NIST800-53R5_CM-7
     - NIST800-53R5_IA-5
-  vars:
-    warn_control_id: "7.2.3"
   block:
     - name: "7.2.3 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Check /etc/passwd entries"
       ansible.builtin.shell: |
@@ -91,6 +89,8 @@
       when: discovered_passwd_gid_check.stdout | length > 0
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "7.2.3"
 
 - name: "7.2.4 | AUDIT | Ensure no duplicate UIDs exist"
   when: rhel10cis_rule_7_2_4
@@ -101,8 +101,6 @@
     - rule_7.2.4
     - user
     - NIST800-53R5_IA-4
-  vars:
-    warn_control_id: "7.2.4"
   block:
     - name: "7.2.4 | AUDIT | Ensure no duplicate UIDs exist | Check for duplicate UIDs"
       ansible.builtin.shell: |
@@ -124,6 +122,8 @@
       when: discovered_user_uid_check.stdout | length > 0
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "7.2.4"
 
 - name: "7.2.5 | AUDIT | Ensure no duplicate GIDs exist"
   when: rhel10cis_rule_7_2_5
@@ -138,8 +138,6 @@
     - NIST800-53R5_CM-6
     - NIST800-53R5_CM-7
     - NIST800-53R5_IA-5
-  vars:
-    warn_control_id: "7.2.5"
   block:
     - name: "7.2.5 | AUDIT | Ensure no duplicate GIDs exist | Check for duplicate GIDs"
       ansible.builtin.shell: |
@@ -161,6 +159,8 @@
       when: discovered_user_gid_check.stdout | length > 0
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "7.2.5"
 
 - name: "7.2.6 | AUDIT | Ensure no duplicate user names exist"
   when: rhel10cis_rule_7_2_6
@@ -175,8 +175,6 @@
     - NIST800-53R5_CM-6
     - NIST800-53R5_CM-7
     - NIST800-53R5_IA-5
-  vars:
-    warn_control_id: "7.2.6"
   block:
     - name: "7.2.6 | AUDIT | Ensure no duplicate user names exist | Check for duplicate User Names"
       ansible.builtin.shell: |
@@ -198,6 +196,8 @@
       when: discovered_username_check.stdout | length > 0
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "7.2.6"
 
 - name: "7.2.7 | AUDIT | Ensure no duplicate group names exist"
   when: rhel10cis_rule_7_2_7
@@ -212,8 +212,6 @@
     - NIST800-53R5_CM-6
     - NIST800-53R5_CM-7
     - NIST800-53R5_IA-5
-  vars:
-    warn_control_id: "7.2.7"
   block:
     - name: "7.2.7 | AUDIT | Ensure no duplicate group names exist | Check for duplicate group names"
       ansible.builtin.shell: |
@@ -235,6 +233,8 @@
       when: discovered_group_check.stdout | length > 0
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "7.2.7"
 
 - name: "7.2.8 | PATCH | Ensure local interactive user home directories are configured"
   when: rhel10cis_rule_7_2_8
@@ -297,8 +297,6 @@
     - NIST800-53R5_CM-6
     - NIST800-53R5_CM-7
     - NIST800-53R5_IA-5
-  vars:
-    warn_control_id: '7.2.9'
   block:
 
     - name: "7.2.9 | AUDIT | Ensure local interactive user dot files access is configured | Interactive User accounts home directories"
@@ -337,6 +335,8 @@
         - not rhel10cis_dotperm_ansiblemanaged
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: '7.2.9'
 
     - name: "7.2.9 | AUDIT | Ensure local interactive user dot files access is configured"
       when:

@@ -167,8 +167,6 @@
     - level1-workstation
     - patch
     - rule_5.4.1.6
-  vars:
-    warn_control_id: "5.4.1.6"
   block:
     - name: "5.4.1.6 | AUDIT | Ensure all users last password change date is in the past | Get current date in Unix Time"
       ansible.builtin.command: echo $(($(date --utc --date "$1" +%s)/86400))
@@ -201,6 +199,8 @@
         - not rhel10cis_futurepwchgdate_autofix
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "5.4.1.6"
 
     - name: "5.4.1.6 | PATCH | Ensure all users last password change date is in the past | Fix accounts with pw change in the future"
       when:

@@ -103,8 +103,6 @@
     - audit
     - rule_1.2.1.4
     - NIST800-53R5_SI-2
-  vars:
-    warn_control_id: "1.2.1.4"
   block:
     - name: "1.2.1.4 | AUDIT | Ensure package manager repositories are configured | Get repo list"
       ansible.builtin.command: dnf repolist
@@ -122,6 +120,8 @@
     - name: "1.2.1.4 | AUDIT | Ensure package manager repositories are configured | Warn Count"
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "1.2.1.4"
 
 - name: "1.2.1.5 | PATCH | Ensure weak dependencies are configured"
   when: rhel10cis_rule_1_2_1_5

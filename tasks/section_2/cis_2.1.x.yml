@@ -195,6 +195,7 @@
       loop: "{{ dnsmasq_services }}"
       vars:
         dnsmasq_installed: "{{ (dnsmasq_pkgs | select('in', ansible_facts['packages']) | list | length) > 0 }}"
+
 - name: "2.1.7 | PATCH | Ensure ftp server services are not in use"
   when: rhel10cis_rule_2_1_7
   tags:
@@ -229,6 +230,7 @@
       loop: "{{ vsftpd_services }}"
       vars:
         vsftpd_installed: "{{ (vsftpd_pkgs | select('in', ansible_facts['packages']) | list | length) > 0 }}"
+
 - name: "2.1.8 | PATCH | Ensure message access server services are not in use"
   when: rhel10cis_rule_2_1_8
   tags:
@@ -299,6 +301,7 @@
       loop: "{{ nfs_services }}"
       vars:
         nfs_installed: "{{ (nfs_pkgs | select('in', ansible_facts['packages']) | list | length) > 0 }}"
+
 - name: "2.1.10 | PATCH | Ensure print server services are not in use"
   when: rhel10cis_rule_2_1_10
   tags:
@@ -432,6 +435,7 @@
       loop: "{{ samba_services }}"
       vars:
         samba_installed: "{{ (samba_pkgs | select('in', ansible_facts['packages']) | list | length) > 0 }}"
+
 - name: "2.1.14 | PATCH | Ensure snmp services are not in use"
   when:
     - "'net-snmp' in ansible_facts['packages']"
@@ -467,6 +471,7 @@
       loop: "{{ snmp_services }}"
       vars:
         snmp_installed: "{{ (snmp_pkgs | select('in', ansible_facts['packages']) | list | length) > 0 }}"
+
 - name: "2.1.15 | PATCH | Ensure telnet server services are not in use"
   when:
     - "'telnet-server' in ansible_facts['packages']"
@@ -503,6 +508,7 @@
       loop: "{{ telnet_services }}"
       vars:
         telnet_installed: "{{ (telnet_pkgs | select('in', ansible_facts['packages']) | list | length) > 0 }}"
+
 - name: "2.1.16 | PATCH | Ensure tftp server services are not in use"
   when:
     - "'tftp-server' in ansible_facts['packages']"
@@ -572,6 +578,7 @@
       loop: "{{ proxy_services }}"
       vars:
         proxy_installed: "{{ (proxy_pkgs | select('in', ansible_facts['packages']) | list | length) > 0 }}"
+
 - name: "2.1.18 | PATCH | Ensure web server services are not in use"
   when: rhel10cis_rule_2_1_18
   tags:
@@ -684,8 +691,6 @@
     - services
     - NIST800-53R5_CM-7
     - rule_2.1.22
-  vars:
-    warn_control_id: "2.1.22"
   block:
     - name: "2.1.22 | AUDIT | Ensure only approved services are listening on a network interface | Get list of services"
       ansible.builtin.command: systemctl list-units --type=service # noqa command-instead-of-module
@@ -704,3 +709,5 @@
     - name: "2.1.22 | AUDIT | Ensure only approved services are listening on a network interface | Warn Count"
       ansible.builtin.import_tasks:
         file: warning_facts.yml
+      vars:
+        warn_control_id: "2.1.22"
