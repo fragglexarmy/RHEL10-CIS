@@ -188,6 +188,8 @@
       ansible.builtin.shell: |
         set -o pipefail
         df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
+      args:
+        executable: "{{ rhel10cis_shell_executable }}"
       failed_when: false
       changed_when: false
       register: discovered_worldwriteable_files
@@ -206,6 +208,8 @@
       ansible.builtin.shell: |
         set -o pipefail
         df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
+      args:
+        executable: "{{ rhel10cis_shell_executable }}"
       changed_when: false
       failed_when: false
 
@@ -227,7 +231,7 @@
       failed_when: false
       check_mode: false
       register: discovered_unowned_files
-      loop: "{{ ansible_facts.mounts }}"
+      loop: "{{ ansible_facts['mounts'] }}"
       loop_control:
         label: "{{ item.mount }}"
 
@@ -287,15 +291,15 @@
       failed_when: false
       check_mode: false
       register: discovered_suid_sgid_files
-      loop: "{{ ansible_facts.mounts }}"
+      loop: "{{ ansible_facts['mounts'] }}"
       loop_control:
         label: "{{ item.mount }}"
 
-    - name: "7.1.13 | AUDIT | Audit SUID executables | Flatten suid_executables results for easier use"
+    - name: "7.1.13 | AUDIT | Ensure SUID and SGID files are reviewed | Flatten suid_executables results for easier use"
       ansible.builtin.set_fact:
         discovered_suid_sgid_files_flatten: "{{ discovered_suid_sgid_files.results | map(attribute='stdout_lines') | flatten }}"
 
-    - name: "7.1.13 | AUDIT | Audit SUID executables | Alert SUID executables exist"
+    - name: "7.1.13 | AUDIT | Ensure SUID and SGID files are reviewed | Alert SUID executables exist"
       when:
         - discovered_suid_sgid_files_flatten | length > 0
         - not rhel10cis_suid_sgid_adjust
@@ -314,7 +318,7 @@
         mode: 'u-s'
       loop: "{{ discovered_suid_sgid_files_flatten }}"
 
-    - name: "7.1.13 | AUDIT | Audit SUID executables | Warn Count"
+    - name: "7.1.13 | AUDIT | Ensure SUID and SGID files are reviewed | Warn Count"
       when:
         - discovered_suid_sgid_files_flatten | length > 0
         - not rhel10cis_suid_sgid_adjust

@@ -21,7 +21,11 @@
         line: "PASS_MAX_DAYS {{ rhel10cis_pass_max_days }}"
 
     - name: "5.4.1.1 | AUDIT | Ensure password expiration is configured | Get existing users PASS_MAX_DAYS"
-      ansible.builtin.shell: "awk -F: '(/^[^:]+:[^!*]/ && ($5> {{ rhel10cis_pass_min_days }} || $5< {{ rhel10cis_pass_max_days }} || $5 == -1)){print $1}' /etc/shadow"
+      ansible.builtin.shell: |
+        set -o pipefail
+        awk -F: '(/^[^:]+:[^!*]/ && ($5> {{ rhel10cis_pass_min_days }} || $5< {{ rhel10cis_pass_max_days }} || $5 == -1)){print $1}' /etc/shadow
+      args:
+        executable: "{{ rhel10cis_shell_executable }}"
       changed_when: false
       failed_when: false
       register: discovered_max_days
@@ -128,6 +132,8 @@
       ansible.builtin.shell: |
         set -o pipefail
         useradd -D | grep INACTIVE={{ rhel10cis_inactive_lock_days }} | cut -f2 -d=
+      args:
+        executable: "{{ rhel10cis_shell_executable }}"
       changed_when: false
       failed_when: false
       check_mode: false
@@ -142,6 +148,8 @@
       ansible.builtin.shell: |
         set -o pipefail
         awk -F: '($2~/^\\$.+\\$/) {if($7 > {{ rhel10cis_inactive_lock_days }} || $7 < 0)print $1}' /etc/shadow # noqa yaml[colons]
+      args:
+        executable: "{{ rhel10cis_shell_executable }}"
       changed_when: false
       check_mode: false
       register: discovered_passwdlck_user_list
@@ -173,6 +181,8 @@
       ansible.builtin.shell: |
         set -o pipefail
         cat /etc/shadow | awk -F: '{if($3>{{ discovered_passwdlck_currentunixtime.stdout }})print$1}'
+      args:
+        executable: "{{ rhel10cis_shell_executable }}"
       changed_when: false
       failed_when: false
       check_mode: false

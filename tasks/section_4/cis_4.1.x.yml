@@ -66,6 +66,8 @@
       ansible.builtin.shell: |
         set -o pipefail
         firewall-cmd --list-all-zones | grep -A1 active
+      args:
+        executable: "{{ rhel10cis_shell_executable }}"
       changed_when: false
       register: discovered_active_firewall_zone_settings
 
@@ -116,13 +118,15 @@
       ansible.builtin.shell: |
         set -o pipefail
         firewall-cmd --list-all --zone="$(firewall-cmd --get-zone-of-interface=lo | xargs)" | grep -Psi -- '^\h*target:\h+\H+'
+      args:
+        executable: "{{ rhel10cis_shell_executable }}"
       changed_when: false
       register: discovered_loopback_zone
 
     - name: "4.1.5 | PATCH | Ensure firewalld loopback traffic is configured | if loopback - no-zone"
       when: "'no zone' in discovered_loopback_zone.stderr"
       ansible.posix.firewalld:
-        zone: trusted
+        zone: "{{ rhel10cis_loopback_firewall_zone }}"
         permanent: true
         state: enabled
         interface: lo
@@ -131,7 +135,7 @@
     - name: "4.1.5 | PATCH | Ensure firewalld loopback traffic is configured | if loopback - no-zone"
       when: "'ACCEPT' not in discovered_loopback_zone.stdout"
       ansible.posix.firewalld:
-        zone: trusted
+        zone: "{{ rhel10cis_loopback_firewall_zone }}"
         permanent: true
         state: enabled
         target: ACCEPT
@@ -173,6 +177,8 @@
       ansible.builtin.shell: |
         set -o pipefail
         firewall-cmd --get-active-zones | awk '!/:/ {print $1}' | while read ZN; do firewall-cmd --list-all --zone=$ZN; done
+      args:
+        executable: "{{ rhel10cis_shell_executable }}"
       changed_when: false
       failed_when: false
       check_mode: false
