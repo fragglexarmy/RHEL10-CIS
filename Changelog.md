@@ -14,6 +14,8 @@
 - ansible_facts context change from ansible_facts.distribution to ansible_facts['distribution']
 - Moved prelim tasks to control areas for easier management
 - vars containing warning moved to actual task
+- container vars file now a variable
+- enable multiple line in the audit template
 - 2.1.x service and pkgs logic vars now in vars/main.yml enabled a more agnostic OS approach going forward
 - 5.4.3.3 thanks to @mboeker public pr #99 for raising this
 - aide improvements thanks to @thuliumdrake

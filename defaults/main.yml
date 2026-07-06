@@ -4,6 +4,8 @@
 # These values may be overridden by other vars-setting options(e.g. like the below 'container_vars_file'), as explained here:
 # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
 
+container_vars_file: is_container.yml
+
 # Run the OS validation check
 # Supported OSs will not need for this to be changed - see README e.g. CentOS
 os_check: true
