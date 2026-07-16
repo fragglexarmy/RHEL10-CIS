@@ -1,5 +1,14 @@
 # Changes to rhel10CIS
 
+## July 2026
+
+- actions workflow update version
+- Updated location that goss is taken from goss-org moved to krameff
+- Fixed ansible dot notation missed last time
+- thanks to @defnotyujine
+  - rhel10cis_loopback_firewall_zone fixed for 4.1.6
+  - tmp mount handler changed to import_tasks
+
 ## June 2026 — QA pass: tag, toggle, and hygiene fixes
 
 - Fixed 6 CIS level/profile tag mismatches against v1.0.1 recommendations (1.1.2.5.1, 1.8.5, 2.1.11, 2.1.20, 3.3.2.1, 6.3.3.22) — includes a `level2- workstation` typo (stray space) on 6.3.3.22
