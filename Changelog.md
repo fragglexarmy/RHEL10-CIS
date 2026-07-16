@@ -5,9 +5,16 @@
 - actions workflow update version
 - Updated location that goss is taken from goss-org moved to krameff
 - Fixed ansible dot notation missed last time
+- auditd immutable check fix and handler logic
 - thanks to @defnotyujine
   - rhel10cis_loopback_firewall_zone fixed for 4.1.6
   - tmp mount handler changed to import_tasks
+
+issues:
+thanks to @mindrb
+- #104 tags on user check in main.yml
+- #106 conditional logic not correct
+- #108 missing notifies when changing conf files 1.5.x and values that don't adhere to standards to be commented out where docs advise
 
 ## June 2026 — QA pass: tag, toggle, and hygiene fixes
 
