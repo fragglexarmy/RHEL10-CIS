@@ -218,8 +218,8 @@
 - name: Auditd rules reload
   when:
     - not system_is_container
-    - not discovered_auditd_immutable_check or
-      "'No change' not in discovered_audit_rules_diff"
+    - discovered_auditd_immutable_check.stdout == 0
+    - "'Rules have changed' in discovered_audit_rules_diff.stdout"
   ansible.builtin.command: augenrules --load
   changed_when: true
   listen: update auditd

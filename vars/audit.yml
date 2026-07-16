@@ -36,9 +36,6 @@ audit_conf_source: "some path or url to copy from"
 # note may not need full path e.g. /opt with the directory being the {{ benchmark }}-Audit directory
 audit_conf_dest: "/opt"
 
-# Where the audit logs are stored
-audit_log_dir: '/opt'
-
 ### options below this line don't often need changing but can be if your environment requires it
 # - e.g. timeout for long running cmds, location of goss binary if using copy method, url for goss binary if using download method etc. ###
 
