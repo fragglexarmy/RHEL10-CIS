@@ -152,7 +152,7 @@
     - NIST800-53R5_NA
   ansible.posix.firewalld:
     rich_rule: "{{ item }}"
-    zone: "{{ rhel10cis_active_firewall_zone }}"
+    zone: "{{ rhel10cis_loopback_firewall_zone }}"
     permanent: true
     immediate: true
     state: enabled
