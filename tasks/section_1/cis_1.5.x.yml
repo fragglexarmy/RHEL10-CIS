@@ -361,7 +361,7 @@
     - NIST800-53R5_CM-6
     - CCI-000366
   block:
-    - name: "1.5.9 | AUDIT | Ensure systemd-coredump ProcessSizeMax is configured | directory exists"
+    - name: "1.5.9 | PATCH | Ensure systemd-coredump ProcessSizeMax is configured | directory exists"
       ansible.builtin.file:
         path: /etc/systemd/coredump.conf.d
         owner: root
@@ -376,18 +376,12 @@
       register: discovered_process_sizemax
 
     - name: "1.5.9 | PATCH | Ensure systemd-coredump ProcessSizeMax is configured | replace incorrect entries"
-      ansible.builtin.replace:
-        path: /usr/lib/systemd/coredump.conf
-        regexp: (ProcessSizeMax\s*=\s*\d*)
-        replace: '#\1'
-
-    - name: "1.5.9 | PATCH | Ensure systemd-coredump ProcessSizeMax is configured | replace incorrect entries"
       when:
         - discovered_process_sizemax.files is defined
         - item.path != '/etc/systemd/coredump.conf.d/60-coredump.conf'
       ansible.builtin.replace:
         path: "{{ item.path }}"
-        regexp: (ProcessSizeMax\s*=\s*(?!0)\d*)
+        regexp: ^(ProcessSizeMax\s*=\s*(?!0).*)$
         replace: '#\1'
       loop: "{{ discovered_process_sizemax.files }}"
       notify: Sysctl update required
@@ -425,19 +419,13 @@
         contains: Storage\s*=\s*(?!none)\d*
       register: discovered_storage
 
-    - name: "1.5.10 | AUDIT | Ensure systemd-coredump Storage is configured | replace incorrect entries"
-      ansible.builtin.replace:
-        path: /usr/lib/systemd/coredump.conf
-        regexp: (Storage\s*=\s*(?!none)\d*)
-        replace: '#\1'
-
-    - name: "1.5.10 | AUDIT | Ensure systemd-coredump Storage is configured | replace incorrect entries"
+    - name: "1.5.10 | PATCH | Ensure systemd-coredump Storage is configured | replace incorrect entries"
       when:
         - discovered_storage.files is defined
         - item.path != '/etc/systemd/coredump.conf.d/60-coredump.conf'
       ansible.builtin.replace:
         path: "{{ item.path }}"
-        regexp: (Storage\s*=\s*\d*)
+        regexp: ^(Storage\s*=\s*(?!none).*)$
         replace: '#\1'
       loop: "{{ discovered_storage.files }}"
       notify: Coredump Reload
