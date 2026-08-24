@@ -73,3 +73,38 @@ audit_results: |
   {% if not audit_only %}The post remediation audit results are: {{ post_audit_results }}{% endif %}
 
   Full breakdown can be found in {{ audit_log_dir }}
+
+###########################################
+### Goss is required on the remote host ###
+### see also defaults/main/main.yml     ###
+
+# If the any of the following are set the variables used by them are defined in this file, these can be overridden by your
+# preferred method of variable management (e.g., vault, group_vars, host_vars, inventory etc.)
+
+# Allow audit to setup the requirements including installing git (if option chosen and downloading and adding goss binary to system)
+setup_audit: false
+
+# enable audits to run - this runs the audit and get the latest content
+run_audit: false
+
+## Only run Audit do not remediate
+audit_only: false
+
+# Run heavy tests - some tests can have more impact on a system enabling these can have greater impact on a system
+audit_run_heavy_tests: true
+
+# Fetch audit output files back to the controller
+fetch_audit_output: false
+
+# Method of getting,uploading the summary files
+## Ensure access and permissions are available for these to occur.
+## options are
+# fetch - fetches from server and moves to location on the ansible controller (could be a mount point available to controller)
+# copy - copies file to a location available to the managed node
+audit_output_collection_method: fetch
+
+# Where the audit logs are stored
+audit_log_dir: '/opt'
+
+# Location to put the audit files
+audit_output_destination: "{{ audit_log_dir }}/audit_summaries/"
